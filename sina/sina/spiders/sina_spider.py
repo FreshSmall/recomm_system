@@ -1,8 +1,8 @@
 '''
 Author: error: git config user.name & please set dead value or install git
 Date: 2025-07-13 23:20:19
-LastEditors: error: git config user.name & please set dead value or install git
-LastEditTime: 2025-07-14 15:42:20
+LastEditors: yinchao
+LastEditTime: 2025-07-14 15:57:05
 Description: 
 '''
 from typing import Any
@@ -34,7 +34,7 @@ class SinaSpiderSpider(scrapy.Spider):
         title = driver.find_elements(By.XPATH, "//h2[@class='undefined']/a[@target='_blank']") 
         time = driver.find_elements(By.XPATH, "//h2[@class='undefined']/../div[@class='feed-card-a " "feed-card-clearfix']/div[@class='feed-card-time']") 
         for i in range(len(title)): 
-            print(title[i].text) 
-            print(time[i].text)
+            print(f'标题：{title[i].text}') 
+            print(f'时间:{time[i].text}')
         driver.quit()
         

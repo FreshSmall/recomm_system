@@ -8,4 +8,4 @@ Description:
 from scrapy import cmdline
 
 if __name__ == '__main__':
-    cmdline.execute('scrapy crawl sina_spider'.split())
+    cmdline.execute('scrapy crawl sina_spider -s LOG_FILE=sipder.log'.split())
