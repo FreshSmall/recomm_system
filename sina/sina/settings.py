@@ -1,3 +1,10 @@
+'''
+Author: yinchao
+Date: 2025-07-15 23:18:18
+LastEditors: yinchao
+LastEditTime: 2025-07-15 23:35:42
+Description: 
+'''
 # Scrapy settings for sina project
 #
 # For simplicity, this file contains only settings considered important or
@@ -62,9 +69,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "sina.pipelines.SinaPipeline": 300,
-#}
+ITEM_PIPELINES = {
+   "sina.pipelines.SinaPipeline": 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

@@ -7,6 +7,7 @@ import scrapy
 
 
 class SinaItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    # 定义新闻标题字段
+    title = scrapy.Field()
+    # 定义新闻时间字段  
+    time = scrapy.Field()
