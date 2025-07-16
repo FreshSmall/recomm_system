@@ -14,7 +14,7 @@ Description:
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "sina"
+BOT_NAME = "crawler"
 
 SPIDER_MODULES = ["sina.spiders"]
 NEWSPIDER_MODULE = "sina.spiders"
