@@ -11,3 +11,7 @@ class SinaItem(scrapy.Item):
     title = scrapy.Field()
     # 定义新闻时间字段  
     time = scrapy.Field()
+    # 定义新闻类型字段
+    type = scrapy.Field()
+    # 定义新闻描述字段
+    desc = scrapy.Field()
