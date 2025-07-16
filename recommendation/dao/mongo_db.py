@@ -2,15 +2,18 @@
 Author: yinchao
 Date: 2025-07-15 22:52:20
 LastEditors: Please set LastEditors
-LastEditTime: 2025-07-16 23:11:37
+LastEditTime: 2025-07-16 22:59:37
 Description: 
 '''
 import pymongo
 
 class MongoDB:
     def __init__(self, db): 
-        mongo_client = self._connect('127.0.0.1', 27017, '', '', db) 
-        self.db_scrapy = mongo_client[db] 
+        self.mongo_client = self._connect('127.0.0.1', 27017, '', '', db) 
+        self.db_name = db
+        # 通用数据库访问方式
+        setattr(self, f'db_{db}', self.mongo_client[db])
+        self.collection_test = getattr(self, f'db_{db}')['test_collections']
     
     def _connect(self, host, port, username, password, db):
         mongo_info = self._splicing(host, port, username, password, db)
@@ -25,3 +28,6 @@ class MongoDB:
         if db != '': 
             client += db 
         return client
+
+    
+    

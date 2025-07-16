@@ -1,8 +1,8 @@
 '''
 Author: yinchao
 Date: 2025-04-02 05:55:01
-LastEditors: yinchao
-LastEditTime: 2025-07-15 23:41:53
+LastEditors: Please set LastEditors
+LastEditTime: 2025-07-16 23:25:09
 Description: 
 '''
 # Define your item pipelines here
@@ -22,6 +22,6 @@ class SinaPipeline:
 
     def process_item(self, item, spider):
         result_item = dict(item)
-        print(f'开始插入数据{result_item}')
+        print(self.mongo_collection)
         self.mongo_collection.insert_one(result_item)
         return item
