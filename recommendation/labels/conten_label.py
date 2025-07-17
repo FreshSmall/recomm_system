@@ -1,3 +1,9 @@
+'''
+author: yinchao
+date: Do not edit
+team: wuhan operational dev.
+Description: 
+'''
 import sys
 import os
 
@@ -7,6 +13,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 from recommendation.dao.mongo_db import MongoDB
 from datetime import datetime
 from datetime import timezone
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 class ContentLabel(object):
    def __init__(self):
@@ -21,17 +28,32 @@ class ContentLabel(object):
        data_list = list(datas)
        print(f"获取到 {len(data_list)} 条数据")
        return data_list
-   
+
+   def extract_keywords_tfidf(self, desc_list, top_k=5):
+       # 处理空desc
+       desc_list = [d if d is not None else '' for d in desc_list]
+       vectorizer = TfidfVectorizer(max_features=1000, stop_words='english')
+       tfidf_matrix = vectorizer.fit_transform(desc_list)
+       feature_names = vectorizer.get_feature_names_out()
+       keywords_list = []
+       for row in tfidf_matrix:
+           row_array = row.toarray().flatten()
+           top_indices = row_array.argsort()[-top_k:][::-1]
+           keywords = [feature_names[i] for i in top_indices if row_array[i] > 0]
+           keywords_list.append(keywords)
+       return keywords_list
+
    def make_content_labels(self):
        datas = self.get_data_from_mongodb()
-       
        if not datas:
            print("没有找到数据")
            return
-           
-       for i, data in enumerate(datas):
+
+       desc_list = [data.get('desc', '') for data in datas]
+       keywords_list = self.extract_keywords_tfidf(desc_list, top_k=5)
+
+       for i, (data, keywords) in enumerate(zip(datas, keywords_list)):
            print(f"处理第 {i+1} 条数据: {data}")
-           
            content_collection = dict()
            # 适配实际的数据字段结构
            content_collection['describe'] = data.get('desc', '')  # 可能为空
@@ -43,9 +65,9 @@ class ContentLabel(object):
            content_collection['read'] = 0
            content_collection['collections'] = 0
            content_collection['create_time'] = datetime.now(timezone.utc)
-           
+           content_collection['keywords'] = keywords
+
            print(f"处理后的数据: {content_collection}")
-           
            # 插入到recommendation数据库
            try:
                self.content_label_collection.insert_one(content_collection)
