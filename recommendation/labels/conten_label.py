@@ -11,6 +11,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from recommendation.dao.mongo_db import MongoDB
+from recommendation.model.test_keywords import Model
 from datetime import datetime
 from datetime import timezone
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -43,6 +44,17 @@ class ContentLabel(object):
            keywords_list.append(keywords)
        return keywords_list
 
+   def extract_keywords_mixed(self, desc_list, top_k=5 ):
+       model = Model()
+       keywords_list = []
+       for desc in desc_list:
+           words_list = model.process_text(desc)
+           textrank_keyword = model.get_keyword(words_list, 'textrank')
+           tfidf_keyword = model.get_keyword(words_list, 'tfidf')
+           keywords = model.keyword_interact(tfidf_keyword, textrank_keyword,top_k)
+           keywords_list.append(keywords)
+       return keywords_list
+
    def make_content_labels(self):
        datas = self.get_data_from_mongodb()
        if not datas:
@@ -50,7 +62,7 @@ class ContentLabel(object):
            return
 
        desc_list = [data.get('desc', '') for data in datas]
-       keywords_list = self.extract_keywords_tfidf(desc_list, top_k=5)
+       keywords_list = self.extract_keywords_mixed(desc_list, top_k=5)
 
        for i, (data, keywords) in enumerate(zip(datas, keywords_list)):
            print(f"处理第 {i+1} 条数据: {data}")
