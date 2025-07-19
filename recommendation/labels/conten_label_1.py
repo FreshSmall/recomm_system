@@ -16,7 +16,7 @@ from recommendation.model.test_keywords import Model
 class ContentLabel(object):
     def __init__(self):
         self.mongo_recommendation = MongoDB(db='recommendation')
-        self.content_label_collection = self.mongo_recommendation.db_recommendation['content_label']
+        self.content_label_collection = self.mongo_recommendation.mongo_client['recommendation']['content_label']
     
     def get_data_from_mongodb(self):
         datas = self.content_label_collection.find()
